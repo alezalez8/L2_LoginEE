@@ -12,51 +12,49 @@ public class LoginServlet extends HttpServlet {
     static final String MESSAGE_PASSWORD = "Password too short(can't be less than 10 symbols) or too simple";
     static final int AGE = 18;
     int age = 0;
+    private boolean isAge = false;
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
         String login = request.getParameter("login");
         String password = request.getParameter("password");
-
+        HttpSession session = request.getSession(true);
 
 
         //if (LOGIN.equals(login) && PASS.equals(password))
-        if (PASS.equals(password)) {
-            HttpSession session = request.getSession(true);
+        //  if (PASS.equals(password)) {
 
+        try {
+            age = Integer.parseInt(request.getParameter("age"));
+        } catch (NumberFormatException e) {
+            System.out.println(e);
+        } finally {
+            isAge = false;
+        }
+        //-----------------------------------
+        if (age < AGE) {
+            session.setAttribute("age", false);
+            session.removeAttribute("user_login");
+            session.setAttribute("message_age", MESSAGE_AGE);
+            isAge = false;
+        } else {
+            session.setAttribute("age", true);
+            isAge = true;
+        }
+        //-----------------------------------
+        if (login.length() < 5) {
 
-            try {
-                age = Integer.parseInt(request.getParameter("age"));
-            } catch (NumberFormatException e) {
-                System.out.println(e);
-            }
+            session.setAttribute("my_login", false);
+            session.removeAttribute("user_login");
+            session.setAttribute("message_login", MESSAGE_LOGIN);
 
+        } else {
+            session.setAttribute("my_login", true);
+        }
 
+        if (LOGIN.equals(login) && PASS.equals(password) && isAge) {
 
+            session.setAttribute("user_login", login);
 
-            if (login.length() < 3) {
-
-                session.setAttribute("my_login", false);
-                session.setAttribute("user_login", "");
-                session.setAttribute("message_login", MESSAGE_LOGIN);
-            } else {
-                session.setAttribute("my_login", true);
-                session.setAttribute("user_login", login);
-            }
-           /* if (password.length() < 10) {
-                session.setAttribute("message_password", MESSAGE_PASSWORD);
-                session.setAttribute("password", false);
-            } else {
-                session.setAttribute("password", true);
-            }*/
-
-
-            if (age >= AGE) {
-                session.setAttribute("age", true);
-                session.setAttribute("user_login", login);
-            } else {
-                session.setAttribute("age", false);
-                session.setAttribute("message_age", MESSAGE_AGE);
-            }
         }
 
         response.sendRedirect("index.jsp");
@@ -68,6 +66,7 @@ public class LoginServlet extends HttpServlet {
 
         if ("exit".equals(a) && (session != null))
             session.removeAttribute("user_login");
+        isAge = false;
 
         response.sendRedirect("index.jsp");
     }

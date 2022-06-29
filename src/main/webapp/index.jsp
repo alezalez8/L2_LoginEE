@@ -15,7 +15,7 @@
 <form action="/login" method="POST">
     Login: <input type="text" name="login"><br>
 
-    <div>Login <%=isLogin%></div>
+<%--    <div>Login <%=isLogin%></div>--%>
 
     <% if(isLogin != null && (!isLogin)) {%>
     <% String message = (String) session.getAttribute("message_login"); %>
@@ -36,6 +36,8 @@
 
 <h1>You are logged in as: <%= login %>
 </h1>
+<div>Login <%=isLogin%></div>
+<div>Age <%=isAge%></div>
 Click this link to <a href="/login?a=exit">logout</a>
 <% } %>
 </body>
