@@ -5,16 +5,26 @@
 </head>
 <body>
 <% String login = (String) session.getAttribute("user_login"); %>
+<% Boolean isPassword = (Boolean) session.getAttribute("password"); %>
+<% Boolean isLogin = (Boolean) session.getAttribute("my_login"); %>
 <% Boolean isAge = (Boolean) session.getAttribute("age"); %>
 
+
 <% if (login == null || "".equals(login)) { %>
+
 <form action="/login" method="POST">
     Login: <input type="text" name="login"><br>
+
+    <div>Login <%=isLogin%></div>
+
+    <% if(isLogin != null && (!isLogin)) {%>
+    <% String message = (String) session.getAttribute("message_login"); %>
+    <div style="color: red"><%=message%></div>
+    <% } %>
+
     Age: <input type="text" name="age"><br>
-
-
     <% if (isAge != null && !isAge) {%>
-    <% String message = (String) session.getAttribute("message"); %>
+    <% String message = (String) session.getAttribute("message_age"); %>
     <div style="color: red"><%=message%></div>
     <% } %>
 
