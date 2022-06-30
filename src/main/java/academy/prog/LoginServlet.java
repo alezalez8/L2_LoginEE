@@ -69,9 +69,6 @@ public class LoginServlet extends HttpServlet {
 
     private boolean isPass(String password) {
         String pattern = "(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9@#$%]).{10,}";
-        if (password.matches(pattern)) {
-            return true;
-        }
-        return false;
+        return password.matches(pattern);
     }
 }
